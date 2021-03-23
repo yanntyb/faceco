@@ -1,3 +1,17 @@
+<?php
+require_once "./Classes/DB.php";
+require_once "./Entity/User.php";
+require_once "./Manager/UserManager.php";
+
+
+session_start();
+$connected = false;
+if(isset($_SESSION["user"])){
+    $user = $_SESSION["user"];
+    $connected = true;
+}
+?>
+
 <!doctype html>
 <html lang="fr">
 <head>
@@ -16,6 +30,11 @@
     <!--Création de l'entête de page. -->
 
     <header>
+        <div id="user">
+            <?php if($connected){?>
+            <span id="profil"><?php echo $user->getNom() . " " . $user->getPrenom();?></span><?php
+            } ?>
+        </div>
         <div id="container_top">
             <img id="logo_faceco" src="IMG/Logo_FACEco.png" alt="logo_faceco">
         </div>
@@ -244,6 +263,14 @@
                         <span id="a_propos">A propos</span>
                     </a>
                 </li>
+                <?php if($connected){?>
+                <li id="drop_down_follow_up_li" class="drop_down_follow_up_li">
+                    <a href="./utils/deconnect.php">
+                        <i class="fas fa-user-times"></i>
+                        <span id="a_propos">Déconnexion</span>
+                    </a>
+                </li><?php
+                }?>
             </ul>
         </div>
     </div>
@@ -255,29 +282,33 @@
             </div>
             <img id="logo_modal" src="IMG/Logo_FACEco.png" alt="logo_faceco" class="logo_modal">
             <div id="button">
-                <div id="connexion">
-                    <button id="connect">Connexion</button>
-                </div>
-                <div id="ou">
-                    <span class="or">OU</span>
-                </div>
-                <div id="button_inscription">
-                    <button id="inscription">Inscrivez-vous</button>
-                </div>
-                <div id="formulaire">
-                    <div id="connexion_server">
-
+                <div id="close_button">
+                    <div id="connexion">
+                        <button id="connect">Connexion</button>
                     </div>
-                    <div id="inscription_server">
-                        <form action="checkRegister.php" method="post">
-                            <input type="text" name="nom" id="nom" placeholder="Nom" required>
-                            <input type="text" name="prenom" id="prenom" placeholder="Prénom" required>
-                            <input type="email" name="mail" id="mail" placeholder="Votre adresse email" required>
-                            <input type="password" name="pass" id="pass" placeholder="Mot de passe" required>
-                            <input type="password" name="verif_pass" id="verif_pass" placeholder="Entrez a nouveau votre mot de passe" required>
-                            <input type="submit" id="submit" value="S'inscrire">
-                        </form>
+                    <div id="ou">
+                        <span class="or">OU</span>
                     </div>
+                    <div id="button_inscription">
+                        <button id="inscription">Inscrivez-vous</button>
+                    </div>
+                </div>
+                <div id="connexion_server">
+                    <form action="./utils/checkLogin.php" method="post">
+                        <input type="text" name="mail" id="mail" placeholder="Votre adresse email" required>
+                        <input type="password" name="pass" id="pass" placeholder="Mot de passe" required>
+                        <input type="submit" id="login" value="Connexion">
+                    </form>
+                </div>
+                <div id="formulaire_server">
+                    <form action="./utils/checkRegister.php" method="post">
+                        <input type="text" name="nom" id="nom" placeholder="Nom" required>
+                        <input type="text" name="prenom" id="prenom" placeholder="Prénom" required>
+                        <input type="email" name="mail" id="mail" placeholder="Votre adresse email" required>
+                        <input type="password" name="pass" id="pass" placeholder="Mot de passe" required>
+                        <input type="password" name="verif_pass" id="verif_pass" placeholder="Entrez a nouveau votre mot de passe" required>
+                        <input type="submit" id="submit" value="S'inscrire">
+                    </form>
                 </div>
             </div>
         </div>
